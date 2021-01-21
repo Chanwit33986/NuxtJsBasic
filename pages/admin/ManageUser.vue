@@ -36,6 +36,7 @@
 import Breadcrumb from '@/components/Breadcrumb'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import moment from 'moment'
 export default {
   components: { Breadcrumb },
   layout: 'coreLayout',
@@ -43,14 +44,24 @@ export default {
     return {
       isBusy: false,
       fields: [
-        'username',
-        'userLevel',
-        'firstName',
-        'lastName',
-        'email',
-        'createDate',
-        'modifyDate',
-        'actions',
+        { key: 'username' },
+        { key: 'userLevel' },
+        { key: 'firstName' },
+        { key: 'lastName' },
+        { key: 'email' },
+        {
+          key: 'createDate',
+          formatter: (value, key, item) => {
+            return moment(value).format('MMMM Do YYYY, h:mm:ss a')
+          },
+        },
+        {
+          key: 'modifyDate',
+          formatter: (value, key, item) => {
+            return moment(value).format('MMMM Do YYYY, h:mm:ss a')
+          },
+        },
+        { key: 'actions' },
       ],
       items: [],
       datas: [
