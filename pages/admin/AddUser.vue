@@ -43,8 +43,16 @@
               aria-describedby="password-feedback"
               :state="validateState('password')"
             ></b-form-input>
-            <b-form-invalid-feedback id="password-feedback"
+            <b-form-invalid-feedback
+              v-if="!$v.form.password.required"
+              id="password-feedback"
               >This is a required field.</b-form-invalid-feedback
+            >
+            <b-form-invalid-feedback
+              v-if="
+                !$v.form.password.validatePassword && $v.form.password.required
+              "
+              >Password Incorrect</b-form-invalid-feedback
             >
           </b-form-group>
           <b-form-group
@@ -66,7 +74,10 @@
               >This is a required field.</b-form-invalid-feedback
             >
             <b-form-invalid-feedback
-              v-if="!$v.form.confirmPassword.sameAsPassword"
+              v-if="
+                !$v.form.confirmPassword.sameAsPassword &&
+                $v.form.confirmPassword.required
+              "
               >Passwords must be identical.</b-form-invalid-feedback
             >
           </b-form-group>
@@ -152,6 +163,17 @@ import {
 import Swal from 'sweetalert2'
 import Breadcrumb from '@/components/Breadcrumb'
 import axios from 'axios'
+
+const validatePassword = (value) => {
+  const containsUppercase = /[A-Z]/.test(value)
+  const containsLowercase = /[a-z]/.test(value)
+  const containsNumber = /[0-9]/.test(value)
+  const containsSpecial = /[#?!@$%^&*-]/.test(value)
+  return (
+    containsUppercase && containsLowercase && containsNumber && containsSpecial
+  )
+}
+
 export default {
   mixins: [validationMixin],
   components: { Breadcrumb },
@@ -191,6 +213,7 @@ export default {
       },
       password: {
         required,
+        validatePassword,
       },
       confirmPassword: {
         required,
