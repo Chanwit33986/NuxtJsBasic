@@ -16,8 +16,18 @@
               aria-describedby="username-feedback"
               :state="validateState('username')"
             ></b-form-input>
-            <b-form-invalid-feedback id="username-feedback"
+            <b-form-invalid-feedback v-if="!$v.form.username.required"
               >This is a required field.</b-form-invalid-feedback
+            >
+            <b-form-invalid-feedback v-if="!$v.form.username.minLength"
+              >Name must have at least
+              {{ $v.form.username.$params.minLength.min }}
+              letters.</b-form-invalid-feedback
+            >
+            <b-form-invalid-feedback v-if="!$v.form.username.maxLength"
+              >Name must have at most
+              {{ $v.form.username.$params.maxLength.max }}
+              letters.</b-form-invalid-feedback
             >
           </b-form-group>
           <b-form-group
@@ -35,6 +45,29 @@
             ></b-form-input>
             <b-form-invalid-feedback id="password-feedback"
               >This is a required field.</b-form-invalid-feedback
+            >
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="7"
+            label="Enter Confirm password"
+          >
+            <b-form-input
+              v-model="$v.form.confirmPassword.$model"
+              type="password"
+              aria-describedby="confirmPassword-feedback"
+              :state="validateState('confirmPassword')"
+            ></b-form-input>
+            <b-form-invalid-feedback
+              id="confirmPassword-feedback"
+              v-if="!$v.form.confirmPassword.required"
+              >This is a required field.</b-form-invalid-feedback
+            >
+            <b-form-invalid-feedback
+              v-if="!$v.form.confirmPassword.sameAsPassword"
+              >Passwords must be identical.</b-form-invalid-feedback
             >
           </b-form-group>
           <b-form-group
@@ -82,7 +115,12 @@
               aria-describedby="email-feedback"
               :state="validateState('email')"
             ></b-form-input>
-            <b-form-invalid-feedback id="email-feedback"
+            <b-form-invalid-feedback v-if="!$v.form.email.email"
+              >Email Incorrect.</b-form-invalid-feedback
+            >
+            <b-form-invalid-feedback
+              id="email-feedback"
+              v-if="!$v.form.email.required"
               >This is a required field.</b-form-invalid-feedback
             >
           </b-form-group>
@@ -104,7 +142,13 @@
 
 <script>
 import { validationMixin } from 'vuelidate'
-import { required, minLength } from 'vuelidate/lib/validators'
+import {
+  required,
+  minLength,
+  sameAs,
+  email,
+  maxLength,
+} from 'vuelidate/lib/validators'
 import Swal from 'sweetalert2'
 import Breadcrumb from '@/components/Breadcrumb'
 import axios from 'axios'
@@ -117,6 +161,7 @@ export default {
       form: {
         username: null,
         password: null,
+        confirmPassword: null,
         firstName: null,
         lastName: null,
         email: null,
@@ -141,9 +186,15 @@ export default {
     form: {
       username: {
         required,
+        minLength: minLength(5),
+        maxLength: maxLength(15),
       },
       password: {
         required,
+      },
+      confirmPassword: {
+        required,
+        sameAsPassword: sameAs('password'),
       },
       firstName: {
         required,
@@ -153,6 +204,7 @@ export default {
       },
       email: {
         required,
+        email,
       },
     },
   },
