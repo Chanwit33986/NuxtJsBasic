@@ -38,6 +38,7 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 import moment from 'moment'
 export default {
+  middleware: ['auth'],
   components: { Breadcrumb },
   layout: 'coreLayout',
   data() {

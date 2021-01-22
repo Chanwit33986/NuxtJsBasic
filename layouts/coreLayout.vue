@@ -16,6 +16,13 @@
             >UserManagement</nuxt-link
           >
         </b-navbar-nav>
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item v-if="$auth.loggedIn">{{ $auth.user }}</b-nav-item>
+          <b-nav-item v-if="$auth.loggedIn" @click="logout">Logout</b-nav-item>
+          <nuxt-link class="nav-item nav-link" v-else to="/login"
+            >Login</nuxt-link
+          >
+        </b-navbar-nav>
       </b-collapse>
     </b-navbar>
     <div class="pt-3 pl-3 pr-3">
@@ -25,7 +32,14 @@
 </template>
 
 <script>
-export default {}
+export default {
+  methods: {
+    async logout() {
+      await this.$auth.logout()
+      this.$router.push('/login')
+    },
+  },
+}
 </script>
 
 <style scoped>

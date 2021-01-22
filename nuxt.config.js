@@ -1,4 +1,9 @@
 export default {
+  target: 'static',
+  router: {
+    base: '/Basic/',
+    // middleware: ['auth'],
+  },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'Basic',
@@ -38,11 +43,32 @@ export default {
     'bootstrap-vue/nuxt',
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
-
+  axios: {
+    baseURL: 'https://localhost:5001/api',
+    credentials: true,
+  },
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { method: 'POST', url: 'login', propertyName: 'token' },
+          user: {
+            method: 'GET',
+            url: 'UserMasters/admin',
+            propertyName: 'username',
+          },
+          logout: false,
+        },
+      },
+    },
+    redirect: {
+      login: '/login',
+    },
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 }
