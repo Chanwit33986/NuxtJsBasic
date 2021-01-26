@@ -53,13 +53,21 @@ export default {
   },
   auth: {
     strategies: {
+      // google: {
+      //   client_id:
+      //     '267581383911-qa52tcs0v2bevo2n867i4i36u3oeie0i.apps.googleusercontent.com',
+      // },
+      // facebook: {
+      //   client_id: '2865651267086659',
+      //   scope: ['public_profile', 'email'],
+      // },
       local: {
         endpoints: {
           login: { method: 'POST', url: 'login', propertyName: 'token' },
           user: {
             method: 'GET',
-            url: 'UserMasters/admin',
-            propertyName: 'username',
+            url: 'login/admin',
+            propertyName: 'user',
           },
           logout: false,
         },

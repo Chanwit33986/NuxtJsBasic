@@ -17,7 +17,12 @@
           >
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item v-if="$auth.loggedIn">{{ $auth.user }}</b-nav-item>
+          <nuxt-link
+            to="/users/profile"
+            class="nav-item nav-link"
+            v-if="$auth.loggedIn"
+            >{{ $auth.user.username }}</nuxt-link
+          >
           <b-nav-item v-if="$auth.loggedIn" @click="logout">Logout</b-nav-item>
           <nuxt-link class="nav-item nav-link" v-else to="/login"
             >Login</nuxt-link
@@ -36,7 +41,7 @@ export default {
   methods: {
     async logout() {
       await this.$auth.logout()
-      this.$router.push('/login')
+      this.$router.push('/')
     },
   },
 }

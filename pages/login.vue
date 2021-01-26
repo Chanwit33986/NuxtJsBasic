@@ -34,6 +34,17 @@
           >
         </b-form-group>
         <b-button type="submit" variant="primary" block pill>Login</b-button>
+        <!-- <b-button
+          type="button"
+          variant="secondary"
+          block
+          pill
+          @click="googleLogin"
+          >Login with Google</b-button
+        > -->
+        <!-- <b-button type="submit" variant="primary" block pill @click="fbLogin"
+          >Facebook Login</b-button
+        > -->
       </b-col>
     </b-row>
   </form>
@@ -86,13 +97,31 @@ export default {
         await this.$auth.loginWith('local', {
           data: payload,
         })
-        this.$router.push('/')
+        this.$router.push('/users/profile')
       } catch (e) {
         Swal.fire({
           icon: 'error',
           title: 'Login Fails',
           text: 'Username or Password incorrect',
-        }).then((res) => this.$router.push('/login'))
+        }).then(() => this.$router.push('/login'))
+      }
+    },
+    async googleLogin(e) {
+      e.preventDefault()
+      try {
+        await this.$auth.loginWith('google').then(() => this.$router.push('/'))
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async fbLogin(e) {
+      e.preventDefault()
+      try {
+        await this.$auth
+          .loginWith('facebook')
+          .then(() => this.$router.push('/'))
+      } catch (e) {
+        console.log(e)
       }
     },
   },
